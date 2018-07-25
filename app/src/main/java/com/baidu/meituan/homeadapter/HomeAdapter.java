@@ -1,6 +1,7 @@
 package com.baidu.meituan.homeadapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.meituan.R;
+import com.baidu.meituan.fragment.activity.DetailsActivity;
 import com.baidu.meituan.homebean.HomeBean;
 import com.bumptech.glide.Glide;
 
@@ -18,6 +20,7 @@ import java.util.List;
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder>{
     private Context context;
     private List<HomeBean.DataBean> list;
+    private View view;
 
     public HomeAdapter(Context context, List<HomeBean.DataBean> list) {
         this.context = context;
@@ -27,13 +30,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder>{
     @NonNull
     @Override
     public HomeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.home_adapter, parent, false);
+        view = LayoutInflater.from(context).inflate(R.layout.home_adapter, parent, false);
 
         return new HomeHolder(view,context);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HomeHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeHolder holder, final int position) {
         String name = list.get(position).getName();
         String month_sales_tip = list.get(position).getMonth_sales_tip();
         String s = list.get(position).getDelivery_time_tip() + "/" + list.get(position).getDistance();
@@ -44,6 +47,17 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder>{
         String icon_url = list.get(position).getDiscounts2().get(0).getIcon_url();
         String icon_url1 = list.get(position).getDiscounts2().get(1).getIcon_url();
         holder.bingContext(name,month_sales_tip,s,s1,info,info1,pic_url,icon_url,icon_url1);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,DetailsActivity.class);
+                String id = list.get(position).getId();
+                String name1 = list.get(position).getName();
+                intent.putExtra("id",id);
+                intent.putExtra("name",name1);
+                context.startActivity(intent);
+            }
+        });
 
     }
 
